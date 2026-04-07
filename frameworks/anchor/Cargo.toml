@@ -1,0 +1,29 @@
+[package]
+name = "fiber-anchor"
+description = "Fiber payment channel — Anchor implementation"
+repository = { workspace = true }
+edition = { workspace = true }
+version = { workspace = true }
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+anchor-lang = { workspace = true }
+solana-program = { workspace = true }
+
+[dev-dependencies]
+fiber-sdk = { workspace = true }
+mollusk-svm = { workspace = true }
+mollusk-svm-bencher = { workspace = true }
+solana-account = { workspace = true }
+solana-clock = { workspace = true }
+solana-instruction = { workspace = true }
+solana-program-error = { workspace = true }
+solana-pubkey = { workspace = true }
+sha2 = "0.10"
+solana-sdk-ids = { workspace = true }
+
+[[bench]]
+name = "compute_units"
+harness = false

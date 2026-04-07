@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Check & Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-check-${{ hashFiles('**/Cargo.lock') }}
+
+      - run: cargo check --workspace
+      - run: cargo clippy --workspace
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.local/share/solana
+            target
+          key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install Solana CLI
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Build SBF program
+        run: |
+          cargo build-sbf --manifest-path native/Cargo.toml
+          mkdir -p target/deploy
+          cp target/sbpf-solana-solana/release/fiber_native.so target/deploy/
+
+      - name: Run tests
+        run: cargo test -p fiber-native --test tests
+
+  bench:
+    name: Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.local/share/solana
+            target
+          key: ${{ runner.os }}-cargo-bench-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install Solana CLI
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Build all SBF programs
+        run: |
+          mkdir -p target/deploy
+          for p in native frameworks/pinocchio frameworks/quasar frameworks/anchor; do
+            cargo build-sbf --manifest-path $p/Cargo.toml
+          done
+          cp target/sbpf-solana-solana/release/fiber_native.so target/deploy/
+          cp target/sbpf-solana-solana/release/fiber_pinocchio.so target/deploy/
+          cp target/sbpf-solana-solana/release/fiber_quasar.so target/deploy/
+          cp target/sbpf-solana-solana/release/fiber_anchor.so target/deploy/
+
+      - name: Run benchmarks
+        run: |
+          for p in fiber-native fiber-pinocchio fiber-quasar fiber-anchor; do
+            echo "=== $p ==="
+            cargo bench -p $p 2>&1 | grep "consumed"
+            echo
+          done
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmarks
+          path: |
+            native/benches/compute_units.md
+            frameworks/*/benches/compute_units.md

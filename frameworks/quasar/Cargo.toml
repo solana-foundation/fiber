@@ -1,0 +1,28 @@
+[package]
+name = "fiber-quasar"
+description = "Fiber payment channel — Quasar implementation"
+repository = { workspace = true }
+edition = { workspace = true }
+version = { workspace = true }
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+fiber = { workspace = true }
+quasar-lang = { workspace = true }
+
+[dev-dependencies]
+fiber-sdk = { workspace = true }
+mollusk-svm = { workspace = true }
+mollusk-svm-bencher = { workspace = true }
+solana-account = { workspace = true }
+solana-clock = { workspace = true }
+solana-instruction = { workspace = true }
+solana-program-error = { workspace = true }
+solana-pubkey = { workspace = true }
+solana-sdk-ids = { workspace = true }
+
+[[bench]]
+name = "compute_units"
+harness = false

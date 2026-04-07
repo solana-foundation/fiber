@@ -1,0 +1,23 @@
+[package]
+name = "fiber"
+description = "Fiber building blocks."
+repository = { workspace = true }
+readme = { workspace = true }
+license-file = { workspace = true }
+edition = { workspace = true }
+version = { workspace = true }
+
+[dependencies]
+solana-account-view = { workspace = true }
+solana-address = { workspace = true }
+solana-instruction-view = { workspace = true, features = ["cpi"] }
+solana-program-error = { workspace = true }
+
+[features]
+default = []
+std = []
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = [
+    'cfg(target_os, values("solana"))',
+] }

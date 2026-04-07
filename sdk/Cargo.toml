@@ -1,0 +1,22 @@
+[package]
+name = "fiber-sdk"
+description = "SDK for the Fiber payment channel program."
+repository = { workspace = true }
+readme = { workspace = true }
+license-file = { workspace = true }
+edition = { workspace = true }
+version = { workspace = true }
+
+[dependencies]
+blake3 = { workspace = true }
+solana-compute-budget-interface = { workspace = true }
+solana-hash = { workspace = true }
+solana-instruction = { workspace = true }
+solana-keypair = { workspace = true }
+solana-pubkey = { workspace = true }
+solana-signature = { workspace = true }
+solana-signer = { workspace = true }
+solana-transaction = { workspace = true, features = ["bincode"] }
+
+[dev-dependencies]
+fiber-native = { workspace = true }

@@ -1,0 +1,16 @@
+# Rust build artifacts
+/target
+/sdk/target
+/program/target
+/deploy
+
+# Configuration files
+.DS_Store
+
+# testing
+test-ledger
+
+# Lock file
+
+# surfpool simnet logs
+.surfpool

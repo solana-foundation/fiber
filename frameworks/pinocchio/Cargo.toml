@@ -1,0 +1,33 @@
+[package]
+name = "fiber-pinocchio"
+description = "Fiber payment channel — Pinocchio implementation"
+repository = { workspace = true }
+edition = { workspace = true }
+version = { workspace = true }
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+fiber = { workspace = true }
+pinocchio = { workspace = true }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = [
+    'cfg(target_os, values("solana"))',
+] }
+
+[dev-dependencies]
+fiber-sdk = { workspace = true }
+mollusk-svm = { workspace = true }
+mollusk-svm-bencher = { workspace = true }
+solana-account = { workspace = true }
+solana-clock = { workspace = true }
+solana-instruction = { workspace = true }
+solana-program-error = { workspace = true }
+solana-pubkey = { workspace = true }
+solana-sdk-ids = { workspace = true }
+
+[[bench]]
+name = "compute_units"
+harness = false
