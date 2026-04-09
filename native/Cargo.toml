@@ -22,7 +22,7 @@ pinocchio = { workspace = true }
 solana-account-view = { workspace = true }
 
 [dev-dependencies]
-fiber-sdk = { workspace = true }
+fiber-sdk = { workspace = true, features = ["test-helpers"] }
 mollusk-svm = { workspace = true }
 mollusk-svm-bencher = { workspace = true }
 solana-account = { workspace = true }

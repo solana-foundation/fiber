@@ -7,13 +7,20 @@ license-file = { workspace = true }
 edition = { workspace = true }
 version = { workspace = true }
 
+[features]
+test-helpers = ["mollusk-svm", "solana-account", "solana-clock", "solana-sdk-ids"]
+
 [dependencies]
 blake3 = { workspace = true }
+mollusk-svm = { workspace = true, optional = true }
+solana-account = { workspace = true, optional = true }
+solana-clock = { workspace = true, optional = true }
 solana-compute-budget-interface = { workspace = true }
 solana-hash = { workspace = true }
 solana-instruction = { workspace = true }
 solana-keypair = { workspace = true }
 solana-pubkey = { workspace = true }
+solana-sdk-ids = { workspace = true, optional = true }
 solana-signature = { workspace = true }
 solana-signer = { workspace = true }
 solana-transaction = { workspace = true, features = ["bincode"] }

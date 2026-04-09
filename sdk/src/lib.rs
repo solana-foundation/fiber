@@ -1,5 +1,7 @@
 mod accounts;
 mod constants;
+#[cfg(feature = "test-helpers")]
+pub mod test_helpers;
 pub mod transaction;
 pub use accounts::{
     distribution_hash, BatchDistributeInstruction, BatchFinalizeInstruction, BatchOpenInstruction,
