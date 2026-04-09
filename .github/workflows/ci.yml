@@ -47,14 +47,23 @@ jobs:
           sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
           echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
 
-      - name: Build SBF program
+      - name: Build SBF programs
         run: |
-          cargo build-sbf --manifest-path native/Cargo.toml
           mkdir -p target/deploy
+          for p in native frameworks/pinocchio frameworks/quasar frameworks/anchor; do
+            cargo build-sbf --manifest-path $p/Cargo.toml
+          done
           cp target/sbpf-solana-solana/release/fiber_native.so target/deploy/
+          cp target/sbpf-solana-solana/release/fiber_pinocchio.so target/deploy/
+          cp target/sbpf-solana-solana/release/fiber_quasar.so target/deploy/
+          cp target/sbpf-solana-solana/release/fiber_anchor.so target/deploy/
 
       - name: Run tests
-        run: cargo test -p fiber-native --test tests
+        run: |
+          cargo test -p fiber-native --test tests
+          cargo test -p fiber-pinocchio --test tests
+          cargo test -p fiber-quasar --test tests
+          cargo test -p fiber-anchor --test tests
 
   bench:
     name: Benchmarks
